@@ -24,7 +24,11 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    header h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+    header h1 { 
+      margin: 0; 
+      font-size: 24px; 
+      letter-spacing: 1px; 
+    }
 
     nav a {
       color: #fff;
@@ -35,7 +39,9 @@
       transition: color 0.3s;
     }
 
-    nav a:hover { color: #d4af37; }
+    nav a:hover { 
+      color: #d4af37; 
+    }
 
     .hero {
       height: 60vh;
@@ -48,11 +54,30 @@
       text-align: center;
     }
 
-    .hero h2 { font-size: 48px; margin: 0 0 10px 0; font-weight: 700; }
-    .hero p { font-size: 18px; color: #aaa; margin: 0; font-weight: 300; }
+    .hero h2 { 
+      font-size: 48px; 
+      margin: 0 0 10px 0; 
+      font-weight: 700; 
+    }
+    
+    .hero p { 
+      font-size: 18px; 
+      color: #aaa; 
+      margin: 0; 
+      font-weight: 300; 
+    }
 
-    .section { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
-    .section h2 { text-align: center; font-size: 32px; margin-bottom: 40px; }
+    .section { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 80px 20px; 
+    }
+    
+    .section h2 { 
+      text-align: center; 
+      font-size: 32px; 
+      margin-bottom: 40px; 
+    }
 
     .projects {
       display: grid;
@@ -101,7 +126,7 @@
       background: #6b38fb;
       display: flex;
       align-items: center;
-      padding: 20px 20px 15px 20px;
+      padding: 16px 20px;
       color: white;
     }
 
@@ -120,8 +145,17 @@
       flex-direction: column;
     }
 
-    .chat-title .small-text { font-size: 13px; opacity: 0.9; margin-bottom: 2px; }
-    .chat-title strong { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+    .chat-title .small-text { 
+      font-size: 13px; 
+      opacity: 0.9; 
+      margin-bottom: 2px; 
+    }
+    
+    .chat-title strong { 
+      font-size: 18px; 
+      font-weight: 600; 
+      letter-spacing: 0.5px; 
+    }
 
     .chat-actions {
       font-size: 22px;
@@ -133,10 +167,13 @@
     }
 
     /* Header Tier 2: Status & Wave */
-    .chat-header-bottom { background: #7c4dff; position: relative; }
+    .chat-header-bottom { 
+      background: #7c4dff; 
+      position: relative; 
+    }
     
     .chat-status {
-      padding: 10px 20px 25px 20px;
+      padding: 8px 20px 30px 20px;
       color: white;
       font-size: 14px;
       display: flex;
@@ -164,7 +201,7 @@
 
     /* Chat Body & Bubbles */
     .chat-body {
-      padding: 25px 20px 10px 20px;
+      padding: 20px 20px 10px 20px;
       height: 320px;
       overflow-y: auto;
       display: flex;
@@ -208,7 +245,7 @@
 
     /* Input Area */
     .chat-bottom {
-      padding: 0 20px 20px 20px;
+      padding: 10px 20px 20px 20px;
       background: #fff;
       position: relative;
     }
@@ -217,14 +254,15 @@
       border: 0;
       height: 1px;
       background: #f0f0f0;
-      margin: 0 0 15px 0;
+      margin: 0 -20px 15px -20px;
     }
 
     .chat-input-area input {
       width: 100%;
+      box-sizing: border-box;
       border: none;
       outline: none;
-      padding: 5px 50px 10px 0; /* padding-right prevents text going under button */
+      padding: 10px 60px 10px 5px; /* padding-right prevents text going under button */
       font-size: 15px;
       color: #333;
       font-family: 'Inter', sans-serif;
@@ -250,7 +288,7 @@
 
     .powered-by {
       margin-left: auto;
-      margin-right: 50px;
+      margin-right: 60px;
       font-size: 9px;
       color: #a0a0a0;
       display: flex;
@@ -259,7 +297,11 @@
       letter-spacing: 0.5px;
     }
 
-    .powered-by strong { color: #333; font-weight: 700; font-size: 10px; }
+    .powered-by strong { 
+      color: #333; 
+      font-weight: 700; 
+      font-size: 10px; 
+    }
 
     /* Floating Send Button */
     .send-btn {
@@ -279,7 +321,10 @@
       transition: transform 0.2s, background 0.2s;
     }
 
-    .send-btn:hover { background: #5a28e0; transform: scale(1.05); }
+    .send-btn:hover { 
+      background: #5a28e0; 
+      transform: scale(1.05); 
+    }
 
     /* Launcher Toggle */
     .chat-toggle {
@@ -301,7 +346,9 @@
       transition: transform 0.3s;
     }
 
-    .chat-toggle:hover { transform: translateY(-5px); }
+    .chat-toggle:hover { 
+      transform: translateY(-5px); 
+    }
   </style>
 </head>
 <body>
