@@ -3,13 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Landing Page - Black & Gold</title>
+    <title>Horis ArchiDesign | Exclusive Portfolio</title>
+    <link rel="icon" href="images/4.png" type="image/png">
 
     <style>
         html {
             scroll-behavior: smooth; 
         }
 
+        /* =========================================
+       Custom Scrollbar (شريط التمرير الذهبي)
+       ========================================= */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFDF00;
+        }
+
+        /* إخفاء مؤشر الماوس العادي لتعويضه بالمخصص */
         body {
             margin: 0;
             min-height: 100vh; 
@@ -22,7 +41,118 @@
             background-attachment: fixed; 
             overflow-x: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            cursor: none; 
         }
+
+        /* إخفاء المؤشر العادي فوق الأزرار والروابط أيضا */
+        a, button, .project-card, .close-modal-btn, .lightbox-close {
+            cursor: none;
+        }
+
+        /* =========================================
+       Custom Cursor (مؤشر الماوس المخصص)
+       ========================================= */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #D4AF37;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+        }
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 99999;
+            pointer-events: none; /* لكي لا يمنع الضغط على الأزرار */
+        }
+        
+        /* تعطيل المؤشر المخصص في الهواتف */
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-outline { display: none !important; }
+            body, a, button, .project-card, .close-modal-btn, .lightbox-close { cursor: auto !important; }
+        }
+
+        /* =========================================
+       Scroll Progress Bar (شريط التمرير الذهبي)
+       ========================================= */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            width: 0%; height: 3px;
+            background-color: #D4AF37;
+            z-index: 100000;
+            box-shadow: 0 0 10px #D4AF37;
+        }
+
+        /* =========================================
+       Back to Top Button (زر العودة للأعلى)
+       ========================================= */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 115px; 
+            right: 37px;
+            width: 50px; height: 50px;
+            background-color: #D4AF37;
+            color: #111;
+            border: none;
+            border-radius: 50%;
+            font-size: 22px;
+            font-weight: bold;
+            z-index: 998;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+        #backToTopBtn:hover {
+            transform: translateY(-5px);
+            background-color: #FFDF00;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* =========================================
+       Preloader (شاشة التحميل الفخمة)
+       ========================================= */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #050505;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease;
+        }
+
+        .loader-ring {
+            width: 80px; height: 80px;
+            border: 3px solid transparent;
+            border-top-color: #D4AF37;
+            border-bottom-color: #D4AF37;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-ring::before {
+            content: '';
+            width: 60px; height: 60px;
+            border: 3px solid transparent;
+            border-left-color: #FFDF00;
+            border-right-color: #FFDF00;
+            border-radius: 50%;
+            animation: spin-reverse 1s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
 
         /* =========================================
        Header Section
@@ -40,6 +170,7 @@
             max-width: 90%; 
             opacity: 0;
             animation: slideIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.5s; 
         }
 
         /* =========================================
@@ -91,10 +222,9 @@
             font-weight: normal;
         }
 
-        /* Action Buttons (Call / Email) */
         .action-btn {
             position: absolute;
-            right: 15px; /* Moved to right for LTR */
+            right: 15px; 
             top: 50%;
             transform: translateY(-50%);
             background-color: #D4AF37;
@@ -238,7 +368,7 @@
             left: 20px;
             right: 20px;
             z-index: 2;
-            text-align: left; /* Changed to left for LTR */
+            text-align: left; 
             transform: translateZ(50px) translateY(20px);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -294,6 +424,56 @@
         
         .project-card:hover .glare {
             opacity: 1;
+        }
+
+        /* =========================================
+       Lightbox Overlay (تكبير الصور)
+       ========================================= */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 85vh;
+            border: 2px solid #D4AF37;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .lightbox.show .lightbox-img {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #D4AF37;
+            font-size: 50px;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .lightbox-close:hover {
+            color: #FFDF00;
+            transform: scale(1.1);
         }
 
 
@@ -402,7 +582,7 @@
 
         .about-content {
             max-width: 700px;
-            text-align: left; /* Changed to left for LTR */
+            text-align: left; 
             max-height: 80vh;
             overflow-y: auto; 
         }
@@ -516,8 +696,14 @@
         }
 
         /* =========================================
-       Floating Chat
+       Floating Chat (مع تأثير النبض)
        ========================================= */
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
         .chat-toggle-btn {
             position: fixed;
             bottom: 30px;
@@ -534,8 +720,9 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
             padding: 0; 
+            animation: pulse-animation 2s infinite; 
         }
 
         .chat-toggle-btn svg {
@@ -546,8 +733,9 @@
 
         .chat-toggle-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
-            color: #FFDF00;
+            color: #111;
+            background-color: #D4AF37;
+            animation: none;
         }
 
         .chat-box {
@@ -586,7 +774,7 @@
             width: 35px; 
             height: 35px;
             fill: #111;
-            margin-right: 15px; /* Changed for LTR */
+            margin-right: 15px; 
         }
 
         .close-chat-btn {
@@ -700,26 +888,40 @@
             background-color: #222;
             color: #D4AF37;
             align-self: flex-start;
-            border-left: 4px solid #D4AF37; /* Changed for LTR */
-            border-top-left-radius: 2px; /* Changed for LTR */
+            border-left: 4px solid #D4AF37; 
+            border-top-left-radius: 2px; 
         }
 
         .msg-user {
             background-color: #D4AF37;
             color: #111;
             align-self: flex-end;
-            border-top-right-radius: 2px; /* Changed for LTR */
+            border-top-right-radius: 2px; 
             font-weight: bold;
+        }
+
+        /* =========================================
+       Footer (تذييل الصفحة)
+       ========================================= */
+        .site-footer {
+            background-color: rgba(5, 5, 5, 0.95);
+            border-top: 1px solid #D4AF37;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .site-footer p {
+            color: #D4AF37;
+            font-size: 15px;
+            margin: 0;
+            letter-spacing: 1px;
         }
 
         /* Animations */
         @keyframes slideIn {
             from { transform: translateX(200px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -734,13 +936,22 @@
 
 <body>
 
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div id="scroll-progress"></div>
+
+    <div id="preloader">
+        <div class="loader-ring"></div>
+    </div>
+
     <button id="menuBtn" class="menu-toggle-btn">☰</button>
 
     <div id="menuFrame" class="menu-frame">
         <button class="menu-item" id="aboutBtn">About Us</button>
         <a href="#projects-section" class="menu-item" id="projectsMenuLink">Projects</a>
         <a href="#contact-section" class="menu-item" id="contactMenuLink">Contact Us</a>
-        <a href="https://www.google.com/maps/place/36%C2%B043'58.8%22N+3%C2%B008'03.0%22E/@36.7298071,3.1285623,2542m/data=!3m1!1e3!4m5!3m4!4b1!8m2!3d36.733!4d3.1341667?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="menu-item" id="mapMenuLink">Location</a>
+        <a href="#contact-section" class="menu-item" id="mapMenuLink">Location</a>
         <button class="menu-item" id="instagramBtn">Instagram</button>
     </div>
 
@@ -791,6 +1002,143 @@
         </div>
     </div>
 
+    <div class="stats-section" style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin: 0 auto 60px auto; width: 90%; max-width: 1000px; padding: 40px 20px; background-color: rgba(17, 17, 17, 0.95); border: 1px solid #D4AF37; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9); text-align: center; position: relative; z-index: 10;">
+        <div class="stat-box">
+            <div class="stat-number" data-target="50" style="font-size: 50px; color: #D4AF37; font-weight: bold; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">0</div>
+            <div style="color: #eee; font-size: 18px; letter-spacing: 1px; font-weight: 300;">Completed Projects</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" data-target="100" style="font-size: 50px; color: #D4AF37; font-weight: bold; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">0</div>
+            <div style="color: #eee; font-size: 18px; letter-spacing: 1px; font-weight: 300;">Happy Clients</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" data-target="5" style="font-size: 50px; color: #D4AF37; font-weight: bold; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">0</div>
+            <div style="color: #eee; font-size: 18px; letter-spacing: 1px; font-weight: 300;">Years Experience</div>
+        </div>
+    </div>
+
+    <div id="projects-section" class="projects-section">
+        <h2>Our Featured Projects</h2>
+        
+        <div class="projects-grid">
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/1.png">
+                    <div class="glare"></div>
+                    <img src="images/1.png" alt="Project 1">
+                    <div class="project-info">
+                        <h3 class="project-title">Cortel Headquarters</h3>
+                        <span class="project-category">Exterior Architectural Facade</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/2.png">
+                    <div class="glare"></div>
+                    <img src="images/2.png" alt="Project 2">
+                    <div class="project-info">
+                        <h3 class="project-title">Modern Workspace</h3>
+                        <span class="project-category">Interior Design - Offices</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/39.jpg">
+                    <div class="glare"></div>
+                    <img src="images/39.jpg" alt="Project 3">
+                    <div class="project-info">
+                        <h3 class="project-title">Elegant Living Room</h3>
+                        <span class="project-category">Interior Design - Residential</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/40.jpg">
+                    <div class="glare"></div>
+                    <img src="images/40.jpg" alt="Project 4">
+                    <div class="project-info">
+                        <h3 class="project-title">Luxury Residential Building</h3>
+                        <span class="project-category">Architectural Facade Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/41.jpg">
+                    <div class="glare"></div>
+                    <img src="images/41.jpg" alt="Project 5">
+                    <div class="project-info">
+                        <h3 class="project-title">Modern Apartment Complex</h3>
+                        <span class="project-category">Facade Study and Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/42.jpg">
+                    <div class="glare"></div>
+                    <img src="images/42.jpg" alt="Project 6">
+                    <div class="project-info">
+                        <h3 class="project-title">Open Restaurant & Cafe</h3>
+                        <span class="project-category">Commercial Space Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/43.jpg">
+                    <div class="glare"></div>
+                    <img src="images/43.jpg" alt="Project 7">
+                    <div class="project-info">
+                        <h3 class="project-title">Integrated Administrative Office</h3>
+                        <span class="project-category">Interior Design and Furnishing</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/44.jpg">
+                    <div class="glare"></div>
+                    <img src="images/44.jpg" alt="Project 8">
+                    <div class="project-info">
+                        <h3 class="project-title">Elegant Meeting Room</h3>
+                        <span class="project-category">Corporate Workspaces</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/45.jpg">
+                    <div class="glare"></div>
+                    <img src="images/45.jpg" alt="Project 9">
+                    <div class="project-info">
+                        <h3 class="project-title">Minimalist Office Design</h3>
+                        <span class="project-category">Minimalist Interior Decor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/46.jpg">
+                    <div class="glare"></div>
+                    <img src="images/46.jpg" alt="Project 10">
+                    <div class="project-info">
+                        <h3 class="project-title">Comfortable Waiting Area</h3>
+                        <span class="project-category">Reception Area Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card" data-img="images/47.jpg">
+                    <div class="glare"></div>
+                    <img src="images/47.jpg" alt="Project 11">
+                    <div class="project-info">
+                        <h3 class="project-title">Executive Office</h3>
+                        <span class="project-category">Furnishing and Interior Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" id="closeLightbox">×</span>
+        <img class="lightbox-img" id="lightbox-img" src="" alt="Project View">
+    </div>
+
     <div id="contact-section" class="contact-section">
         <h2>Contact the Architect</h2>
         
@@ -811,124 +1159,17 @@
             <textarea name="Message" placeholder="Write your message here..." required></textarea>
             <button type="submit" class="send-btn">Send Message</button>
         </form>
-    </div>
 
-    <div id="projects-section" class="projects-section">
-        <h2>Our Featured Projects</h2>
-        
-        <div class="projects-grid">
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/1.png" alt="Project 1">
-                    <div class="project-info">
-                        <h3 class="project-title">Cortel Headquarters</h3>
-                        <span class="project-category">Exterior Architectural Facade</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/2.png" alt="Project 2">
-                    <div class="project-info">
-                        <h3 class="project-title">Modern Workspace</h3>
-                        <span class="project-category">Interior Design - Offices</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/39.jpg" alt="Project 3">
-                    <div class="project-info">
-                        <h3 class="project-title">Elegant Living Room</h3>
-                        <span class="project-category">Interior Design - Residential</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/40.jpg" alt="Project 4">
-                    <div class="project-info">
-                        <h3 class="project-title">Luxury Residential Building</h3>
-                        <span class="project-category">Architectural Facade Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/41.jpg" alt="Project 5">
-                    <div class="project-info">
-                        <h3 class="project-title">Modern Apartment Complex</h3>
-                        <span class="project-category">Facade Study and Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/42.jpg" alt="Project 6">
-                    <div class="project-info">
-                        <h3 class="project-title">Open Restaurant & Cafe</h3>
-                        <span class="project-category">Commercial Space Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/43.jpg" alt="Project 7">
-                    <div class="project-info">
-                        <h3 class="project-title">Integrated Administrative Office</h3>
-                        <span class="project-category">Interior Design and Furnishing</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/44.jpg" alt="Project 8">
-                    <div class="project-info">
-                        <h3 class="project-title">Elegant Meeting Room</h3>
-                        <span class="project-category">Corporate Workspaces</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/45.jpg" alt="Project 9">
-                    <div class="project-info">
-                        <h3 class="project-title">Minimalist Office Design</h3>
-                        <span class="project-category">Minimalist Interior Decor</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/46.jpg" alt="Project 10">
-                    <div class="project-info">
-                        <h3 class="project-title">Comfortable Waiting Area</h3>
-                        <span class="project-category">Reception Area Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card-wrapper scrolled-image">
-                <div class="project-card">
-                    <div class="glare"></div>
-                    <img src="images/47.jpg" alt="Project 11">
-                    <div class="project-info">
-                        <h3 class="project-title">Executive Office</h3>
-                        <span class="project-category">Furnishing and Interior Design</span>
-                    </div>
-                </div>
-            </div>
+        <div class="map-container">
+            <iframe src="https://maps.google.com/maps?q=36°43'58.8%22N%203°08'03.0%22E&t=&z=16&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </div>
+
+    <footer class="site-footer">
+        <p>© 2026 Horis ArchiDesign. All Rights Reserved.</p>
+    </footer>
+
+    <button id="backToTopBtn">↑</button>
 
     <button id="chatToggleBtn" class="chat-toggle-btn">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -945,7 +1186,7 @@
                     </svg>
                     <span>Contact Us</span>
                 </div>
-                <button id="closeChatBtn" class="close-chat-btn">×</button>
+                <button id="closeChatBtn" class="closeChatBtn">×</button>
             </div>
 
             <div id="chatBody" class="chat-body">
@@ -970,233 +1211,212 @@
     </div>
 
     <script>
+        // إجبار الصفحة على العودة لأعلى نقطة (اللوغو) عند أي تحديث Refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
+        // إزالة شاشة التحميل بعد اكتمال تحميل الصفحة
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 600);
+        });
+
         function restartAnimation() {
             const logo = document.getElementById("logo");
             logo.style.animation = "none";
             logo.offsetHeight; 
             logo.style.animation = "slideIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards";
+            logo.style.animationDelay = "0.5s";
         }
-        window.addEventListener("load", restartAnimation);
         window.addEventListener("focus", restartAnimation);
+
+        // Custom Cursor (مؤشر الماوس المخصص)
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        document.querySelectorAll('a, button, .project-card, .close-modal-btn, .lightbox-close').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Scroll Progress Bar & Back to Top Button
+        const scrollProgress = document.getElementById('scroll-progress');
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (document.documentElement.scrollTop / totalHeight) * 100;
+            scrollProgress.style.width = `${progress}%`;
+
+            if (document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         // --- Menu Logic ---
         const menuBtn = document.getElementById("menuBtn");
         const menuFrame = document.getElementById("menuFrame");
-        const contactMenuLink = document.getElementById("contactMenuLink");
-        const projectsMenuLink = document.getElementById("projectsMenuLink"); 
-        const mapMenuLink = document.getElementById("mapMenuLink");
-
-        menuBtn.addEventListener("click", function (event) {
-            menuFrame.classList.toggle("show");
-            event.stopPropagation();
+        menuBtn.addEventListener("click", (event) => { menuFrame.classList.toggle("show"); event.stopPropagation(); });
+        window.addEventListener("click", (event) => { if (!menuFrame.contains(event.target) && event.target !== menuBtn) menuFrame.classList.remove("show"); });
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => menuFrame.classList.remove("show"));
         });
 
-        window.addEventListener("click", function (event) {
-            if (!menuFrame.contains(event.target) && event.target !== menuBtn) {
-                menuFrame.classList.remove("show");
-            }
+        // --- Modals Logic ---
+        const setupModal = (btnId, modalId, closeId) => {
+            const btn = document.getElementById(btnId);
+            const modal = document.getElementById(modalId);
+            const close = document.getElementById(closeId);
+            btn.addEventListener("click", () => { menuFrame.classList.remove("show"); modal.classList.add("show"); });
+            close.addEventListener("click", () => modal.classList.remove("show"));
+            modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+        };
+        setupModal("aboutBtn", "aboutModal", "closeAboutBtn");
+        setupModal("instagramBtn", "qrModal", "closeQrBtn");
+
+        // --- Lightbox Logic ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = document.getElementById('closeLightbox');
+        
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => {
+                lightboxImg.src = card.getAttribute('data-img');
+                lightbox.classList.add('show');
+            });
         });
-
-        contactMenuLink.addEventListener("click", function () {
-            menuFrame.classList.remove("show");
-        });
-
-        projectsMenuLink.addEventListener("click", function () {
-            menuFrame.classList.remove("show");
-        });
-
-        mapMenuLink.addEventListener("click", function () {
-            menuFrame.classList.remove("show");
-        });
-
-        // --- About Modal Logic ---
-        const aboutBtn = document.getElementById("aboutBtn");
-        const aboutModal = document.getElementById("aboutModal");
-        const closeAboutBtn = document.getElementById("closeAboutBtn");
-
-        aboutBtn.addEventListener("click", () => {
-            menuFrame.classList.remove("show"); 
-            aboutModal.classList.add("show");      
-        });
-
-        closeAboutBtn.addEventListener("click", () => {
-            aboutModal.classList.remove("show");
-        });
-
-        aboutModal.addEventListener("click", (event) => {
-            if (event.target === aboutModal) {
-                aboutModal.classList.remove("show");
-            }
-        });
-
-        // --- Instagram Modal Logic ---
-        const instagramBtn = document.getElementById("instagramBtn");
-        const qrModal = document.getElementById("qrModal");
-        const closeQrBtn = document.getElementById("closeQrBtn");
-
-        instagramBtn.addEventListener("click", () => {
-            menuFrame.classList.remove("show"); 
-            qrModal.classList.add("show");      
-        });
-
-        closeQrBtn.addEventListener("click", () => {
-            qrModal.classList.remove("show");
-        });
-
-        qrModal.addEventListener("click", (event) => {
-            if (event.target === qrModal) {
-                qrModal.classList.remove("show");
-            }
-        });
+        closeLightbox.addEventListener('click', () => lightbox.classList.remove('show'));
+        lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('show'); });
 
         // --- Chat Logic ---
         const chatToggleBtn = document.getElementById("chatToggleBtn");
         const chatOverlay = document.getElementById("chatOverlay"); 
-        const closeChatBtn = document.getElementById("closeChatBtn");
+        const closeChatBtn = document.querySelector(".closeChatBtn");
         const chatInput = document.getElementById("chatInput");
         const chatSendBtn = document.getElementById("chatSendBtn");
         const chatBody = document.getElementById("chatBody");
         const chatSuggestions = document.getElementById("chatSuggestions");
-        const suggestionBtns = document.querySelectorAll(".suggestion-btn");
 
         const predefinedAnswers = {
             "What are your services?": "We provide architectural design, interior design, consulting, and project management services.",
-            "Where is your office located?": "We offer consultations and designs, and we can arrange meetings or communicate online to execute your project wherever you are.",
+            "Where is your office located?": "Our office is located in Algiers, specifically near the Great Mosque of Algiers in the municipality of Mohammadia.",
             "How can I request a design?": "You can request a design by contacting us here in the chat, or via phone or email as shown on our website.",
-            "What are the design prices?": "Prices vary depending on the area and type of project. Please provide us with your project details to offer a suitable quote.",
+            "What are the design prices?": "For pricing details, please contact us at this number:<br><span style='color: #D4AF37; font-weight: bold;'>0540 78 10 91</span><br>Or via the following email:<br><span style='color: #D4AF37; font-weight: bold;'>horisarchitecture18@gmail.com</span>",
             "How long does a project take?": "Completion time depends on the design complexity and project size, but we are always committed to the deadlines agreed upon with the client."
         };
+        const fallbackAnswer = `Sorry, I cannot answer this question.<br>Please call the following number:<br><span style="color: #D4AF37; font-weight: bold;">0540 78 10 91</span><br>Or email us at:<br><span style="color: #D4AF37; font-weight: bold;">horisarchitecture18@gmail.com</span>`;
 
-        const fallbackAnswer = `Sorry, I cannot answer this question.<br>Please call the following number:<br>
-<span style="color: #D4AF37; font-weight: bold; display: inline-block;">0540 78 10 91</span><br>
-Or email us at:<br>
-<span style="color: #D4AF37; font-weight: bold;">horisarchitecture18@gmail.com</span>`;
+        chatToggleBtn.addEventListener("click", () => { chatOverlay.classList.add("show"); chatInput.focus(); });
+        closeChatBtn.addEventListener("click", () => chatOverlay.classList.remove("show"));
+        chatOverlay.addEventListener("click", (e) => { if (e.target === chatOverlay) chatOverlay.classList.remove("show"); });
+        chatInput.addEventListener("focus", () => { chatSuggestions.classList.add("show"); chatBody.scrollTop = chatBody.scrollHeight; });
 
-        chatToggleBtn.addEventListener("click", () => {
-            chatOverlay.classList.add("show");
-            chatInput.focus();
-        });
-
-        closeChatBtn.addEventListener("click", () => {
-            chatOverlay.classList.remove("show");
-        });
-
-        chatOverlay.addEventListener("click", (event) => {
-            if (event.target === chatOverlay) {
-                chatOverlay.classList.remove("show");
-            }
-        });
-
-        chatInput.addEventListener("focus", () => {
-            chatSuggestions.classList.add("show");
-            chatBody.scrollTop = chatBody.scrollHeight;
-        });
-
-        suggestionBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                chatInput.value = btn.textContent;
-                sendMessage();
-            });
+        document.querySelectorAll(".suggestion-btn").forEach(btn => {
+            btn.addEventListener("click", () => { chatInput.value = btn.textContent; sendMessage(); });
         });
 
         function sendMessage() {
             const text = chatInput.value.trim();
             if (text !== "") {
                 chatSuggestions.classList.remove("show");
-
                 const msgDiv = document.createElement("div");
-                msgDiv.className = "msg msg-user";
-                msgDiv.textContent = text;
+                msgDiv.className = "msg msg-user"; msgDiv.textContent = text;
                 chatBody.appendChild(msgDiv);
-                
-                chatInput.value = "";
-                chatBody.scrollTop = chatBody.scrollHeight;
-
+                chatInput.value = ""; chatBody.scrollTop = chatBody.scrollHeight;
                 let botReply = fallbackAnswer; 
-                for (const question in predefinedAnswers) {
-                    if (text === question) {
-                        botReply = predefinedAnswers[question];
-                        break;
-                    }
-                }
-
+                if (predefinedAnswers[text]) botReply = predefinedAnswers[text];
                 setTimeout(() => {
                     const replyDiv = document.createElement("div");
-                    replyDiv.className = "msg msg-bot";
-                    replyDiv.innerHTML = botReply;
-                    chatBody.appendChild(replyDiv);
-                    chatBody.scrollTop = chatBody.scrollHeight;
+                    replyDiv.className = "msg msg-bot"; replyDiv.innerHTML = botReply;
+                    chatBody.appendChild(replyDiv); chatBody.scrollTop = chatBody.scrollHeight;
                 }, 1000);
             }
         }
-
         chatSendBtn.addEventListener("click", sendMessage);
-        chatInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                sendMessage();
-            }
-        });
+        chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
 
-        document.addEventListener("click", function(event) {
-            if (!chatInput.contains(event.target) && !chatSuggestions.contains(event.target)) {
-                chatSuggestions.classList.remove("show");
-            }
-        });
-
-        // =========================================
-        // --- 3D Tilt Backward Logic ---
-        // =========================================
-        const projectCards = document.querySelectorAll('.scrolled-image');
-
-        const observerOptions = {
-            root: null, 
-            rootMargin: '0px', 
-            threshold: 0.15 
-        };
-
-        const AppearOnScroll = new IntersectionObserver(function(entries, observer) {
+        // 3D Tilt & Scroll Animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+        const AppearOnScroll = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('appeared');
-                    observer.unobserve(entry.target);
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('appeared'); observer.unobserve(entry.target); }
             });
         }, observerOptions);
+        document.querySelectorAll('.scrolled-image').forEach(card => AppearOnScroll.observe(card));
 
-        projectCards.forEach(card => {
-            AppearOnScroll.observe(card);
-        });
-
-        const cards = document.querySelectorAll('.project-card');
-
-        cards.forEach(card => {
+        document.querySelectorAll('.project-card').forEach(card => {
             const glare = card.querySelector('.glare');
-            
             card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; 
-                const y = e.clientY - rect.top;  
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * 10; 
-                const rotateY = ((x - centerX) / centerX) * -10;
-                
+                const rect = card.getBoundingClientRect(), x = e.clientX - rect.left, y = e.clientY - rect.top;  
+                const centerX = rect.width / 2, centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * 10, rotateY = ((x - centerX) / centerX) * -10;
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                
-                if(glare) {
-                    glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2) 0%, transparent 60%)`;
-                }
+                if(glare) glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2) 0%, transparent 60%)`;
             });
-            
             card.addEventListener('mouseleave', () => {
                 card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-                if(glare) {
-                    glare.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)`;
-                }
+                if(glare) glare.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)`;
             });
         });
+
+        // --- Animated Stats Counter (الجافاسكريبت الخاص بالأرقام المتحركة) ---
+        const statNumbers = document.querySelectorAll('.stat-number');
+        let hasCounted = false;
+        const countObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !hasCounted) {
+                hasCounted = true;
+                statNumbers.forEach(stat => {
+                    const target = +stat.getAttribute('data-target');
+                    const increment = target / 100; 
+                    let current = 0;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) { 
+                            stat.innerText = Math.ceil(current) + "+"; 
+                            requestAnimationFrame(updateCounter); 
+                        } 
+                        else { 
+                            stat.innerText = target + "+"; 
+                        }
+                    };
+                    updateCounter();
+                });
+            }
+        }, { threshold: 0.5 });
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) countObserver.observe(statsSection);
 
     </script>
 </body>
