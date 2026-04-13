@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page - Black & Gold</title>
+
+    <style>
+        html {
+            scroll-behavior: smooth; 
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh; 
+            /* Permanent gif background */
+            background-image: url("images/background.gif");
+            background-color: #050505;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top center; 
+            background-attachment: fixed; 
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* =========================================
+       Header Section
+       ========================================= */
+        .header {
+            position: relative;
+            height: 100vh; 
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .logo {
+            width: 1500px;
+            max-width: 90%; 
+            opacity: 0;
+            animation: slideIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        /* =========================================
+       Contact Section 
+       ========================================= */
+        .contact-section {
+            margin: 60px auto; 
+            background-color: rgba(17, 17, 17, 0.95);
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            color: #D4AF37;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        .info-boxes {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            position: relative; 
+            background-color: #111;
+            border: 1px solid #D4AF37;
+            padding: 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .info-box span {
+            display: block;
+            font-size: 14px;
+            color: #D4AF37;
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+
+        /* Action Buttons (Call / Email) */
+        .action-btn {
+            position: absolute;
+            right: 15px; /* Moved to right for LTR */
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #D4AF37;
+            color: #111;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #FFDF00;
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .contact-form textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #222;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: none;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: #D4AF37;
+        }
+
+        .contact-form .send-btn {
+            background-color: #D4AF37;
+            color: #111;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .contact-form .send-btn:hover {
+            background-color: #FFDF00;
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+       Projects Section (3D Tilt)
+       ========================================= */
+        .projects-section {
+            margin: 60px auto 100px auto; 
+            background-color: rgba(17, 17, 17, 0.95);
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 1200px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
+            text-align: center;
+        }
+
+        .projects-section h2 {
+            color: #D4AF37;
+            margin-top: 0;
+            margin-bottom: 40px;
+            font-size: 34px;
+            letter-spacing: 1px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            perspective: 1200px; 
+        }
+
+        .project-card-wrapper {
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-card-wrapper.appeared {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card-wrapper:nth-child(4n+1).appeared { transition-delay: 100ms; }
+        .project-card-wrapper:nth-child(4n+2).appeared { transition-delay: 200ms; }
+        .project-card-wrapper:nth-child(4n+3).appeared { transition-delay: 300ms; }
+        .project-card-wrapper:nth-child(4n+4).appeared { transition-delay: 400ms; }
+
+        .project-card {
+            position: relative;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background-color: #000;
+            height: 280px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.1s ease-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            border-radius: 11px;
+            display: block;
+            transform: translateZ(20px) scale(1.05); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0; top: 0;
+            background: linear-gradient(to top, rgba(5, 5, 5, 0.95) 0%, rgba(5, 5, 5, 0.2) 50%, transparent 100%);
+            border-radius: 11px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            transform: translateZ(30px); 
+        }
+
+        .project-info {
+            position: absolute;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            z-index: 2;
+            text-align: left; /* Changed to left for LTR */
+            transform: translateZ(50px) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+        }
+
+        .project-title {
+            color: #D4AF37;
+            margin: 0 0 5px 0;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .project-category {
+            color: #eee;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }
+
+        .project-card:hover {
+            border-color: #D4AF37;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3), 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .project-card:hover img {
+            transform: translateZ(20px) scale(1.15); 
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover .project-info {
+            transform: translateZ(50px) translateY(0);
+            opacity: 1;
+        }
+
+        .glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 11px;
+            z-index: 3;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .project-card:hover .glare {
+            opacity: 1;
+        }
+
+
+        /* =========================================
+       Menu Button & Frame
+       ========================================= */
+        .menu-toggle-btn {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            font-size: 45px;
+            background: none;
+            border: none;
+            color: #D4AF37;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+            z-index: 1000;
+            padding: 10px;
+            transition: transform 0.3s ease, color 0.3s ease;
+            line-height: 1;
+        }
+
+        .menu-toggle-btn:hover {
+            transform: scale(1.1);
+            color: #FFDF00;
+        }
+
+        .menu-frame {
+            position: absolute;
+            top: 100px;
+            right: 50px;
+            background-color: rgba(17, 17, 17, 0.95);
+            padding: 25px;
+            border: 2px solid #D4AF37;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+            min-width: 220px;
+        }
+
+        .menu-frame.show {
+            display: flex;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            font-size: 20px;
+            border: 2px solid #D4AF37;
+            background-color: #111;
+            color: #D4AF37;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-item:hover {
+            background-color: #D4AF37;
+            color: #111;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(212, 175, 55, 0.4);
+        }
+
+        /* =========================================
+       Modals (Popups)
+       ========================================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); 
+            z-index: 2000; 
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #111;
+            border: 2px solid #D4AF37;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 1);
+            max-width: 90%;
+            transform: scale(0.9);
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .about-content {
+            max-width: 700px;
+            text-align: left; /* Changed to left for LTR */
+            max-height: 80vh;
+            overflow-y: auto; 
+        }
+
+        .about-content::-webkit-scrollbar { width: 6px; }
+        .about-content::-webkit-scrollbar-track { background: #111; }
+        .about-content::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 5px; }
+
+        .about-title {
+            color: #D4AF37;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .about-subtitle {
+            color: #FFDF00;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .about-text {
+            color: #eee;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-footer-text {
+            color: #D4AF37;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 35px;
+            color: #D4AF37;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .close-modal-btn:hover {
+            color: #FFDF00;
+        }
+
+        /* Instagram Modal */
+        .qr-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 10px;
+            border: 2px solid #D4AF37;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            margin-top: 15px;
+        }
+
+        .qr-text {
+            color: #ccc;
+            font-size: 15px;
+        }
+
+        .insta-link-wrapper {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .insta-or-text {
+            color: #D4AF37;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .insta-action-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 70px;
+            height: 70px;
+            background-color: #000;
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .insta-action-btn img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .insta-action-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.4);
+            border-color: #FFDF00;
+        }
+
+        /* =========================================
+       Floating Chat
+       ========================================= */
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background-color: #111;
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            color: #D4AF37;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            padding: 0; 
+        }
+
+        .chat-toggle-btn svg {
+            width: 35px;
+            height: 35px;
+            fill: currentColor;
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            color: #FFDF00;
+        }
+
+        .chat-box {
+            position: relative; 
+            width: 960px; 
+            height: 85vh; 
+            max-width: 95vw;
+            background-color: #111;
+            border: 2px solid #D4AF37;
+            border-radius: 15px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.9);
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .chat-header {
+            background-color: #D4AF37;
+            color: #111;
+            padding: 20px 25px; 
+            font-size: 24px; 
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-chat-icon {
+            width: 35px; 
+            height: 35px;
+            fill: #111;
+            margin-right: 15px; /* Changed for LTR */
+        }
+
+        .close-chat-btn {
+            background: none;
+            border: none;
+            font-size: 40px; 
+            color: #111;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 25px; 
+            overflow-y: auto;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+        }
+
+        .chat-body::-webkit-scrollbar { width: 8px; }
+        .chat-body::-webkit-scrollbar-track { background: #111; }
+        .chat-body::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 5px; }
+
+        .chat-suggestions-container {
+            display: none;
+            padding: 20px 25px;
+            background-color: #111;
+            border-top: 1px solid #333;
+            flex-wrap: wrap;
+            gap: 12px;
+            max-height: 200px; 
+            overflow-y: auto;
+        }
+
+        .chat-suggestions-container.show {
+            display: flex;
+        }
+
+        .chat-suggestions-container::-webkit-scrollbar { width: 6px; }
+        .chat-suggestions-container::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+
+        .suggestion-btn {
+            background-color: #222;
+            color: #D4AF37;
+            border: 1px solid #D4AF37;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 18px; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .suggestion-btn:hover {
+            background-color: #D4AF37;
+            color: #111;
+        }
+
+        .chat-footer {
+            padding: 25px;
+            background-color: #111;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: white;
+            font-size: 18px; 
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: #D4AF37;
+        }
+
+        .chat-send-btn {
+            padding: 15px 30px;
+            background-color: #D4AF37;
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px; 
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-send-btn:hover {
+            background-color: #FFDF00;
+        }
+
+        .msg {
+            max-width: 75%; 
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 20px; 
+            line-height: 1.6;
+        }
+
+        .msg-bot {
+            background-color: #222;
+            color: #D4AF37;
+            align-self: flex-start;
+            border-left: 4px solid #D4AF37; /* Changed for LTR */
+            border-top-left-radius: 2px; /* Changed for LTR */
+        }
+
+        .msg-user {
+            background-color: #D4AF37;
+            color: #111;
+            align-self: flex-end;
+            border-top-right-radius: 2px; /* Changed for LTR */
+            font-weight: bold;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { transform: translateX(200px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="menuBtn" class="menu-toggle-btn">☰</button>
+
+    <div id="menuFrame" class="menu-frame">
+        <button class="menu-item" id="aboutBtn">About Us</button>
+        <a href="#projects-section" class="menu-item" id="projectsMenuLink">Projects</a>
+        <a href="#contact-section" class="menu-item" id="contactMenuLink">Contact Us</a>
+        <a href="https://www.google.com/maps/place/36%C2%B043'58.8%22N+3%C2%B008'03.0%22E/@36.7298071,3.1285623,2542m/data=!3m1!1e3!4m5!3m4!4b1!8m2!3d36.733!4d3.1341667?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="menu-item" id="mapMenuLink">Location</a>
+        <button class="menu-item" id="instagramBtn">Instagram</button>
+    </div>
+
+    <div class="header">
+        <img src="images/4.png" class="logo" id="logo" alt="Logo">
+    </div>
+
+    <div id="aboutModal" class="modal-overlay">
+        <div class="modal-content about-content">
+            <button id="closeAboutBtn" class="close-modal-btn">×</button>
+            <h3 class="about-title">Horis ArchiDesign</h3>
+            <h4 class="about-subtitle">Architecture as a distinctive signature. Excellence as a commitment.</h4>
+            
+            <p class="about-text">
+                Horis ArchiDesign embodies an ambitious vision in architecture and interior design, where every project is seen as a distinct work of art. We create unique, elegant, and timeless spaces, custom-designed for clients seeking elegance, distinction, and perfection.
+            </p>
+            <p class="about-text">
+                Our approach is characterized by meticulous attention to detail. Proportions, materials, lighting, and fixtures - nothing is left to chance. Every line is considered, every volume balanced, and every finish carefully selected to achieve the highest levels of excellence.
+            </p>
+            <p class="about-text">
+                We adopt a tailor-made methodology, based on active listening and a deep understanding of our clients' aspirations. Our commitment is not limited to design; we manage every stage of the project with precision, professionalism, and skill, ensuring quality, meeting deadlines, and complete aesthetic harmony.
+            </p>
+            <p class="about-text">
+                At Horis ArchiDesign, the concept of luxury goes beyond the exterior appearance.<br>
+                It is reflected in the precision of details, the nobility of materials, the purity of lines, and the harmony of spaces.
+            </p>
+            <p class="about-footer-text">
+                Every project bears our signature:<br>
+                Bold, disciplined, and highly elegant architecture.
+            </p>
+        </div>
+    </div>
+
+    <div id="qrModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <button id="closeQrBtn" class="close-modal-btn">×</button>
+            <h3 class="about-title">Follow us on Instagram</h3>
+            <p class="qr-text">Scan the code to visit our profile</p>
+            
+            <img src="images/QRcode.png" alt="Instagram QR Code" class="qr-image">
+            
+            <div class="insta-link-wrapper">
+                <p class="insta-or-text">Or click here</p>
+                <a href="https://www.instagram.com/horis_archidesign/" target="_blank" class="insta-action-btn">
+                    <img src="images/instagram.png" alt="Instagram Logo">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-section" class="contact-section">
+        <h2>Contact the Architect</h2>
+        
+        <div class="info-boxes">
+            <div class="info-box">
+                <span>Email:</span>
+                horisarchitecture18@gmail.com
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=horisarchitecture18@gmail.com" target="_blank" class="action-btn">Send Email</a>
+            </div>
+            <div class="info-box">
+                <span>Phone Number:</span>
+                0540 78 10 91
+                <a href="tel:0540781091" class="action-btn">Call</a>
+            </div>
+        </div>
+
+        <form action="mailto:yacinecode@gmail.com" method="post" enctype="text/plain" class="contact-form">
+            <textarea name="Message" placeholder="Write your message here..." required></textarea>
+            <button type="submit" class="send-btn">Send Message</button>
+        </form>
+    </div>
+
+    <div id="projects-section" class="projects-section">
+        <h2>Our Featured Projects</h2>
+        
+        <div class="projects-grid">
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/1.png" alt="Project 1">
+                    <div class="project-info">
+                        <h3 class="project-title">Cortel Headquarters</h3>
+                        <span class="project-category">Exterior Architectural Facade</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/2.png" alt="Project 2">
+                    <div class="project-info">
+                        <h3 class="project-title">Modern Workspace</h3>
+                        <span class="project-category">Interior Design - Offices</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/39.jpg" alt="Project 3">
+                    <div class="project-info">
+                        <h3 class="project-title">Elegant Living Room</h3>
+                        <span class="project-category">Interior Design - Residential</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/40.jpg" alt="Project 4">
+                    <div class="project-info">
+                        <h3 class="project-title">Luxury Residential Building</h3>
+                        <span class="project-category">Architectural Facade Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/41.jpg" alt="Project 5">
+                    <div class="project-info">
+                        <h3 class="project-title">Modern Apartment Complex</h3>
+                        <span class="project-category">Facade Study and Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/42.jpg" alt="Project 6">
+                    <div class="project-info">
+                        <h3 class="project-title">Open Restaurant & Cafe</h3>
+                        <span class="project-category">Commercial Space Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/43.jpg" alt="Project 7">
+                    <div class="project-info">
+                        <h3 class="project-title">Integrated Administrative Office</h3>
+                        <span class="project-category">Interior Design and Furnishing</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/44.jpg" alt="Project 8">
+                    <div class="project-info">
+                        <h3 class="project-title">Elegant Meeting Room</h3>
+                        <span class="project-category">Corporate Workspaces</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/45.jpg" alt="Project 9">
+                    <div class="project-info">
+                        <h3 class="project-title">Minimalist Office Design</h3>
+                        <span class="project-category">Minimalist Interior Decor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/46.jpg" alt="Project 10">
+                    <div class="project-info">
+                        <h3 class="project-title">Comfortable Waiting Area</h3>
+                        <span class="project-category">Reception Area Design</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card-wrapper scrolled-image">
+                <div class="project-card">
+                    <div class="glare"></div>
+                    <img src="images/47.jpg" alt="Project 11">
+                    <div class="project-info">
+                        <h3 class="project-title">Executive Office</h3>
+                        <span class="project-category">Furnishing and Interior Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="chatToggleBtn" class="chat-toggle-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+        </svg>
+    </button>
+
+    <div id="chatOverlay" class="modal-overlay">
+        <div class="chat-box">
+            <div class="chat-header">
+                <div class="chat-header-title">
+                    <svg class="header-chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                    </svg>
+                    <span>Contact Us</span>
+                </div>
+                <button id="closeChatBtn" class="close-chat-btn">×</button>
+            </div>
+
+            <div id="chatBody" class="chat-body">
+                <div class="msg msg-bot">
+                    Welcome to HORIS ArchiDesign ✨<br>How can we help you today?
+                </div>
+            </div>
+
+            <div id="chatSuggestions" class="chat-suggestions-container">
+                <button class="suggestion-btn">What are your services?</button>
+                <button class="suggestion-btn">Where is your office located?</button>
+                <button class="suggestion-btn">How can I request a design?</button>
+                <button class="suggestion-btn">What are the design prices?</button>
+                <button class="suggestion-btn">How long does a project take?</button>
+            </div>
+
+            <div class="chat-footer">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type your message here...">
+                <button id="chatSendBtn" class="chat-send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function restartAnimation() {
+            const logo = document.getElementById("logo");
+            logo.style.animation = "none";
+            logo.offsetHeight; 
+            logo.style.animation = "slideIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards";
+        }
+        window.addEventListener("load", restartAnimation);
+        window.addEventListener("focus", restartAnimation);
+
+        // --- Menu Logic ---
+        const menuBtn = document.getElementById("menuBtn");
+        const menuFrame = document.getElementById("menuFrame");
+        const contactMenuLink = document.getElementById("contactMenuLink");
+        const projectsMenuLink = document.getElementById("projectsMenuLink"); 
+        const mapMenuLink = document.getElementById("mapMenuLink");
+
+        menuBtn.addEventListener("click", function (event) {
+            menuFrame.classList.toggle("show");
+            event.stopPropagation();
+        });
+
+        window.addEventListener("click", function (event) {
+            if (!menuFrame.contains(event.target) && event.target !== menuBtn) {
+                menuFrame.classList.remove("show");
+            }
+        });
+
+        contactMenuLink.addEventListener("click", function () {
+            menuFrame.classList.remove("show");
+        });
+
+        projectsMenuLink.addEventListener("click", function () {
+            menuFrame.classList.remove("show");
+        });
+
+        mapMenuLink.addEventListener("click", function () {
+            menuFrame.classList.remove("show");
+        });
+
+        // --- About Modal Logic ---
+        const aboutBtn = document.getElementById("aboutBtn");
+        const aboutModal = document.getElementById("aboutModal");
+        const closeAboutBtn = document.getElementById("closeAboutBtn");
+
+        aboutBtn.addEventListener("click", () => {
+            menuFrame.classList.remove("show"); 
+            aboutModal.classList.add("show");      
+        });
+
+        closeAboutBtn.addEventListener("click", () => {
+            aboutModal.classList.remove("show");
+        });
+
+        aboutModal.addEventListener("click", (event) => {
+            if (event.target === aboutModal) {
+                aboutModal.classList.remove("show");
+            }
+        });
+
+        // --- Instagram Modal Logic ---
+        const instagramBtn = document.getElementById("instagramBtn");
+        const qrModal = document.getElementById("qrModal");
+        const closeQrBtn = document.getElementById("closeQrBtn");
+
+        instagramBtn.addEventListener("click", () => {
+            menuFrame.classList.remove("show"); 
+            qrModal.classList.add("show");      
+        });
+
+        closeQrBtn.addEventListener("click", () => {
+            qrModal.classList.remove("show");
+        });
+
+        qrModal.addEventListener("click", (event) => {
+            if (event.target === qrModal) {
+                qrModal.classList.remove("show");
+            }
+        });
+
+        // --- Chat Logic ---
+        const chatToggleBtn = document.getElementById("chatToggleBtn");
+        const chatOverlay = document.getElementById("chatOverlay"); 
+        const closeChatBtn = document.getElementById("closeChatBtn");
+        const chatInput = document.getElementById("chatInput");
+        const chatSendBtn = document.getElementById("chatSendBtn");
+        const chatBody = document.getElementById("chatBody");
+        const chatSuggestions = document.getElementById("chatSuggestions");
+        const suggestionBtns = document.querySelectorAll(".suggestion-btn");
+
+        const predefinedAnswers = {
+            "What are your services?": "We provide architectural design, interior design, consulting, and project management services.",
+            "Where is your office located?": "We offer consultations and designs, and we can arrange meetings or communicate online to execute your project wherever you are.",
+            "How can I request a design?": "You can request a design by contacting us here in the chat, or via phone or email as shown on our website.",
+            "What are the design prices?": "Prices vary depending on the area and type of project. Please provide us with your project details to offer a suitable quote.",
+            "How long does a project take?": "Completion time depends on the design complexity and project size, but we are always committed to the deadlines agreed upon with the client."
+        };
+
+        const fallbackAnswer = `Sorry, I cannot answer this question.<br>Please call the following number:<br>
+<span style="color: #D4AF37; font-weight: bold; display: inline-block;">0540 78 10 91</span><br>
+Or email us at:<br>
+<span style="color: #D4AF37; font-weight: bold;">horisarchitecture18@gmail.com</span>`;
+
+        chatToggleBtn.addEventListener("click", () => {
+            chatOverlay.classList.add("show");
+            chatInput.focus();
+        });
+
+        closeChatBtn.addEventListener("click", () => {
+            chatOverlay.classList.remove("show");
+        });
+
+        chatOverlay.addEventListener("click", (event) => {
+            if (event.target === chatOverlay) {
+                chatOverlay.classList.remove("show");
+            }
+        });
+
+        chatInput.addEventListener("focus", () => {
+            chatSuggestions.classList.add("show");
+            chatBody.scrollTop = chatBody.scrollHeight;
+        });
+
+        suggestionBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                chatInput.value = btn.textContent;
+                sendMessage();
+            });
+        });
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (text !== "") {
+                chatSuggestions.classList.remove("show");
+
+                const msgDiv = document.createElement("div");
+                msgDiv.className = "msg msg-user";
+                msgDiv.textContent = text;
+                chatBody.appendChild(msgDiv);
+                
+                chatInput.value = "";
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                let botReply = fallbackAnswer; 
+                for (const question in predefinedAnswers) {
+                    if (text === question) {
+                        botReply = predefinedAnswers[question];
+                        break;
+                    }
+                }
+
+                setTimeout(() => {
+                    const replyDiv = document.createElement("div");
+                    replyDiv.className = "msg msg-bot";
+                    replyDiv.innerHTML = botReply;
+                    chatBody.appendChild(replyDiv);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        chatSendBtn.addEventListener("click", sendMessage);
+        chatInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!chatInput.contains(event.target) && !chatSuggestions.contains(event.target)) {
+                chatSuggestions.classList.remove("show");
+            }
+        });
+
+        // =========================================
+        // --- 3D Tilt Backward Logic ---
+        // =========================================
+        const projectCards = document.querySelectorAll('.scrolled-image');
+
+        const observerOptions = {
+            root: null, 
+            rootMargin: '0px', 
+            threshold: 0.15 
+        };
+
+        const AppearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('appeared');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        projectCards.forEach(card => {
+            AppearOnScroll.observe(card);
+        });
+
+        const cards = document.querySelectorAll('.project-card');
+
+        cards.forEach(card => {
+            const glare = card.querySelector('.glare');
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; 
+                const y = e.clientY - rect.top;  
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * 10; 
+                const rotateY = ((x - centerX) / centerX) * -10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                if(glare) {
+                    glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 255, 255, 0.2) 0%, transparent 60%)`;
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                if(glare) {
+                    glare.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%)`;
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
